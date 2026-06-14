@@ -1,0 +1,56 @@
+from pathlib import Path
+
+html = """<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Battle Arena Starter</title>
+<style>
+body{margin:0;background:#222;color:#fff;font-family:sans-serif;overflow:hidden}
+#top{position:fixed;top:0;left:0;right:0;height:50px;background:#111;display:flex;gap:20px;align-items:center;justify-content:center}
+canvas{display:block}
+</style>
+</head>
+<body>
+<div id="top">🪙 <span id="coins">0</span>　💎 <span id="emeralds">50</span></div>
+<canvas id="game"></canvas>
+<script>
+const canvas=document.getElementById('game');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize(); addEventListener('resize',resize);
+
+const p={x:300,y:250,r:20,s:5};
+const keys={};
+
+addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+function update(){
+ if(keys.w)p.y-=p.s;
+ if(keys.s)p.y+=p.s;
+ if(keys.a)p.x-=p.s;
+ if(keys.d)p.x+=p.s;
+}
+
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle='cyan';
+ ctx.beginPath();
+ ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ ctx.fill();
+}
+
+(function loop(){
+ update();
+ draw();
+ requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>"""
+
+path = "/mnt/data/index.html"
+Path(path).write_text(html, encoding="utf-8")
+print(path)
